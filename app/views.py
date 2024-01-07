@@ -9,7 +9,6 @@ tasks = {
     0: "bli buke",
     1: "laj rrobat",
     2: "praktiko kodim",
-
 }
 
 def home(request):
