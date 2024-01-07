@@ -1,0 +1,107 @@
+<html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<body>
+  {% load static %}
+
+  <h1>Welcome to your to-do app</h1>
+
+  <form action="">
+    <label for="new_task">New task:</label>
+    <input type="text" id="new_task" name="new_task"><br><br>
+    <input type="submit" value="ruaj" id="submit">
+  </form>
+
+
+  <ol>
+    {% for key, value in tasks.items %}
+
+    <li>{{ value }}</li> <a href="#" id="delete" name="{{ key }}">delete</a>
+
+    {% endfor %}
+  </ol>
+
+
+</body>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // Attach a click event listener to all elements with class 'delete'
+    var deleteButtons = document.querySelectorAll('#delete');
+    deleteButtons.forEach(function (button) {
+      button.addEventListener('click', function (e) {
+        e.preventDefault(); // Prevent the default behavior of the anchor tag
+
+        var a = e.target.name;
+
+        deleteElement(a);
+
+
+      });
+    });
+
+    function deleteElement(a) {
+
+      var csrftoken = '{{ csrf_token }}'
+
+      const requestObj = new XMLHttpRequest()
+      requestObj.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+
+          location.reload()
+        }
+      }
+
+      requestObj.open("POST", 'delete');
+      requestObj.setRequestHeader("X-CSRFToken", csrftoken);
+
+      const formdata = new FormData()
+      formdata.append('delete_id', a);
+      requestObj.send(formdata);
+
+    }
+
+  });
+</script>
+
+<script>
+
+
+
+
+
+
+
+  function sendDetails() {
+
+    var csrftoken = '{{ csrf_token }}'
+
+    const requestObj = new XMLHttpRequest()
+    requestObj.onreadystatechange = function () {
+      if (this.readyState == 4 && this.status == 200) {
+
+        location.reload()
+      }
+    }
+
+    requestObj.open("POST", 'new');
+    requestObj.setRequestHeader("X-CSRFToken", csrftoken);
+
+    const formdata = new FormData()
+    formdata.append('new_task', $("#new_task").val());
+    requestObj.send(formdata);
+
+  }
+
+  $('#submit').on('click', function (e) {
+    e.preventDefault
+    sendDetails();
+  });
+
+
+
+</script>
+
+</html>
